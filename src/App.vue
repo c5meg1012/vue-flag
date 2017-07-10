@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="polidog">
-      <div class="left js_left_flag">
-      </div>
       <div class="right js_right_flag">
+      </div>
+      <div class="left js_left_flag">
       </div>
     </div>
     <div class="buttons">
       <div class="item">
-        <button class="js_left_button" @click.stop="moveFlag('left')">↑</button>
+        <button class="right js_right_button" @click.stop="moveFlag('right')">↑</button>
       </div>
       <div class="item">
-        <button class="js_right_button" @click.stop="moveFlag('right')">↑</button>
+        <button class="left js_left_button" @click.stop="moveFlag('left')">↑</button>
       </div>
     </div>
   </div>
@@ -52,7 +52,8 @@ export default {
 <style lang="scss">
   .polidog {
     overflow: hidden;
-    width: 500px;
+    width: 630px;
+    height: 630px;
     margin: 0 auto;
     padding: 30px 0;
 
@@ -60,11 +61,29 @@ export default {
     .left {
       width: 50%;
       float: left;
-      height: 100px;
-      background-color: #000;
+      height: 0;
+      padding-top: 630px;
+    }
+
+    .right {
+      background-image: url('../static/img/polidog_flag_right.png');
+      background-repeat: no-repeat;
+      background-position: 3px center;
+      background-size: cover;
 
       &.raise {
-        background-color: #f00;
+        background-image: url('../static/img/polidog_flag_raise_right.png');
+        background-position: 0 center;
+      }
+    }
+
+    .left {
+      background-image: url('../static/img/polidog_flag_left.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      &.raise {
+        background-image: url('../static/img/polidog_flag_raise_left.png');
       }
     }
   }
@@ -77,6 +96,30 @@ export default {
     .item {
       width: 50%;
       float: left;
+      text-align: center;
+    }
+
+    button {
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      padding: 10px;
+      line-height: 1;
+      font-size: 24px;
+      font-weight: 700;
+      border-radius: 50%;
+    }
+
+    .right {
+      background-color: #e20000;
+      border: 2px solid #af0202;
+      color: #fff;
+    }
+
+    .left {
+      background-color: #fff;
+      border: 2px solid #afafaf;
+      color: #000;
     }
   }
 </style>
