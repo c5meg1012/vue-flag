@@ -1,17 +1,15 @@
 <template>
   <div>
     <polidog
-      :leftFlagState="leftFlagState"
-      :rightFlagState="rightFlagState">
+      :flagState="flagState">
     </polidog>
     <buttons
-      :leftButtonState="leftButtonState"
-      :rightButtonState="rightButtonState"
+      :buttonState="buttonState"
       @setFlagState="setFlagState"
-      @setButtonArrows="setButtonArrows">
+      @setButtonState="setButtonState">
     </buttons>
-    <div>{{rightFlagState}}</div>
-    <div>{{leftFlagState}}</div>
+    <div>{{flagState.right}}</div>
+    <div>{{flagState.left}}</div>
   </div>
 </template>
 
@@ -27,25 +25,29 @@
     },
     data () {
       return {
-        leftFlagState: -1,
-        rightFlagState: -1,
-        leftButtonState: 1,
-        rightButtonState: 1
+        flagState: {
+          left: -1,
+          right: -1
+        },
+        buttonState: {
+          left: 1,
+          right: 1
+        }
       }
     },
     methods: {
       setFlagState (hand) {
         if (hand === 'left') {
-          this.leftFlagState *= -1
+          this.flagState.left *= -1
         } else {
-          this.rightFlagState *= -1
+          this.flagState.right *= -1
         }
       },
-      setButtonArrows (hand) {
+      setButtonState (hand) {
         if (hand === 'left') {
-          this.leftButtonState *= -1
+          this.buttonState.left *= -1
         } else {
-          this.rightButtonState *= -1
+          this.buttonState.right *= -1
         }
       }
     }

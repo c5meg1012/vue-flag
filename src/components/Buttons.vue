@@ -3,13 +3,13 @@
     <div class="buttons">
       <div class="item">
         <button class="right" @click.stop="moveFlag('right')">
-          <span v-if="rightButtonState === 1">↑</span>
+          <span v-if="buttonState.right === 1">↑</span>
           <span v-else>↓</span>
         </button>
       </div>
       <div class="item">
         <button class="left" @click.stop="moveFlag('left')">
-          <span v-if="leftButtonState === 1">↑</span>
+          <span v-if="buttonState.left === 1">↑</span>
           <span v-else>↓</span>
         </button>
       </div>
@@ -21,13 +21,12 @@
   export default {
     name: 'buttons',
     props: {
-      leftButtonState: Number,
-      rightButtonState: Number
+      buttonState: Object
     },
     methods: {
       moveFlag (hand) {
         this.$emit('setFlagState', hand)
-        this.$emit('setButtonArrows', hand)
+        this.$emit('setButtonState', hand)
       }
     }
 }

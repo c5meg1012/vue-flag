@@ -2,11 +2,11 @@
   <div>
     <div class="polidog">
       <div class="right">
-        <img v-if="rightFlagState === 1" src="../../static/img/polidog_flag_raise_right.png">
+        <img v-if="flagState.right === 1" src="../../static/img/polidog_flag_raise_right.png">
         <img v-else src="../../static/img/polidog_flag_right.png">
       </div>
       <div class="left">
-        <img v-if="leftFlagState === 1" src="../../static/img/polidog_flag_raise_left.png">
+        <img v-if="flagState.left === 1" src="../../static/img/polidog_flag_raise_left.png">
         <img v-else src="../../static/img/polidog_flag_left.png">
       </div>
     </div>
@@ -17,8 +17,7 @@
   export default {
     name: 'polidog',
     props: {
-      leftFlagState: Number,
-      rightFlagState: Number
+      flagState: Object
     }
   }
 </script>
