@@ -2,13 +2,13 @@
   <div>
     <div class="buttons">
       <div class="item">
-        <button class="right" @click.stop="moveFlag('right')">
+        <button class="right" @click.stop="moveFlag('right')" v-bind:disabled="count >= 10">
           <span v-if="buttonState.right === 1">↑</span>
           <span v-else>↓</span>
         </button>
       </div>
       <div class="item">
-        <button class="left" @click.stop="moveFlag('left')">
+        <button class="left" @click.stop="moveFlag('left')" v-bind:disabled="count >= 10">
           <span v-if="buttonState.left === 1">↑</span>
           <span v-else>↓</span>
         </button>
@@ -21,12 +21,14 @@
   export default {
     name: 'buttons',
     props: {
-      buttonState: Object
+      buttonState: Object,
+      count: Number
     },
     methods: {
       moveFlag (hand) {
         this.$emit('setFlagState', hand)
         this.$emit('setButtonState', hand)
+        this.$emit('incrementCount')
       }
     }
 }
