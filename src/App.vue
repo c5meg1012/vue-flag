@@ -1,7 +1,17 @@
 <template>
   <div>
-    <polidog></polidog>
-    <buttons></buttons>
+    <polidog
+      :leftFlagState="leftFlagState"
+      :rightFlagState="rightFlagState">
+    </polidog>
+    <buttons
+      :leftButtonState="leftButtonState"
+      :rightButtonState="rightButtonState"
+      @setFlagState="setFlagState"
+      @setButtonArrows="setButtonArrows">
+    </buttons>
+    <div>{{rightFlagState}}</div>
+    <div>{{leftFlagState}}</div>
   </div>
 </template>
 
@@ -14,32 +24,30 @@
     components: {
       Polidog,
       Buttons
+    },
+    data () {
+      return {
+        leftFlagState: -1,
+        rightFlagState: -1,
+        leftButtonState: 1,
+        rightButtonState: 1
+      }
+    },
+    methods: {
+      setFlagState (hand) {
+        if (hand === 'left') {
+          this.leftFlagState *= -1
+        } else {
+          this.rightFlagState *= -1
+        }
+      },
+      setButtonArrows (hand) {
+        if (hand === 'left') {
+          this.leftButtonState *= -1
+        } else {
+          this.rightButtonState *= -1
+        }
+      }
     }
-    // methods: {
-    //   moveFlag (hand) {
-    //     let buttunClass = '.js_' + hand + '_button'
-    //     let button = document.querySelector(buttunClass)
-    //     let flagClass = '.js_' + hand + '_flag'
-    //     let flag = document.querySelector(flagClass)
-    //     this.changeButton(button)
-    //     this.changeFlag(flag)
-    //   },
-    //   changeButton (button) {
-    //     if (button.classList.contains('raise')) {
-    //       button.innerHTML = '↑'
-    //       button.classList.remove('raise')
-    //     } else {
-    //       button.innerHTML = '↓'
-    //       button.classList.add('raise')
-    //     }
-    //   },
-    //   changeFlag (flag) {
-    //     if (flag.classList.contains('raise')) {
-    //       flag.classList.remove('raise')
-    //     } else {
-    //       flag.classList.add('raise')
-    //     }
-    //   }
-    // }
   }
 </script>

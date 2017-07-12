@@ -2,12 +2,16 @@
   <div>
     <div class="buttons">
       <div class="item">
-        <!-- <button class="right js_right_button" @click.stop="moveFlag('right')">↑</button> -->
-        <button class="right js_right_button">↑</button>
+        <button class="right" @click.stop="moveFlag('right')">
+          <span v-if="rightButtonState === 1">↑</span>
+          <span v-else>↓</span>
+        </button>
       </div>
       <div class="item">
-        <!-- <button class="left js_left_button" @click.stop="moveFlag('left')">↑</button> -->
-        <button class="left js_left_button">↑</button>
+        <button class="left" @click.stop="moveFlag('left')">
+          <span v-if="leftButtonState === 1">↑</span>
+          <span v-else>↓</span>
+        </button>
       </div>
     </div>
   </div>
@@ -15,33 +19,17 @@
 
 <script>
   export default {
-    name: 'buttons'
-    // methods: {
-    //   moveFlag (hand) {
-    //     let buttunClass = '.js_' + hand + '_button'
-    //     let button = document.querySelector(buttunClass)
-    //     let flagClass = '.js_' + hand + '_flag'
-    //     let flag = document.querySelector(flagClass)
-    //     this.changeButton(button)
-    //     this.changeFlag(flag)
-    //   },
-    //   changeButton (button) {
-    //     if (button.classList.contains('raise')) {
-    //       button.innerHTML = '↑'
-    //       button.classList.remove('raise')
-    //     } else {
-    //       button.innerHTML = '↓'
-    //       button.classList.add('raise')
-    //     }
-    //   },
-    //   changeFlag (flag) {
-    //     if (flag.classList.contains('raise')) {
-    //       flag.classList.remove('raise')
-    //     } else {
-    //       flag.classList.add('raise')
-    //     }
-    //   }
-    // }
+    name: 'buttons',
+    props: {
+      leftButtonState: Number,
+      rightButtonState: Number
+    },
+    methods: {
+      moveFlag (hand) {
+        this.$emit('setFlagState', hand)
+        this.$emit('setButtonArrows', hand)
+      }
+    }
 }
 </script>
 
