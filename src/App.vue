@@ -4,10 +4,9 @@
       :flagState="flagState">
     </polidog>
     <buttons
-      :buttonState="buttonState"
+      :flagState="flagState"
       :count="count"
       @setFlagState="setFlagState"
-      @setButtonState="setButtonState"
       @incrementCount="incrementCount">
     </buttons>
     <div>{{flagState.right}}</div>
@@ -32,10 +31,6 @@
           left: -1,
           right: -1
         },
-        buttonState: {
-          left: 1,
-          right: 1
-        },
         count: 0
       }
     },
@@ -45,13 +40,6 @@
           this.flagState.left *= -1
         } else {
           this.flagState.right *= -1
-        }
-      },
-      setButtonState (hand) {
-        if (hand === 'left') {
-          this.buttonState.left *= -1
-        } else {
-          this.buttonState.right *= -1
         }
       },
       incrementCount () {
