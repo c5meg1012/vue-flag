@@ -63,10 +63,15 @@
         this.answer.left = -1
       },
       setFlagState (hand) {
-        if (hand === 'left') {
-          this.flagState.left *= -1
-        } else {
-          this.flagState.right *= -1
+        switch (hand) {
+          case 'left':
+            this.flagState.left *= -1
+            break
+          case 'right':
+            this.flagState.right *= -1
+            break
+          case 'center':
+            break
         }
         // 暫定
         this.checkAnswer()
@@ -119,8 +124,8 @@
           case 2:
             break
         }
-        console.log(this.answer.left)
-        console.log(this.answer.right)
+        console.log('left' + this.answer.left)
+        console.log('right' + this.answer.right)
       },
       checkAnswer () {
         let answerJson = JSON.stringify(this.answer)

@@ -8,6 +8,11 @@
         </button>
       </div>
       <div class="item">
+        <button class="center" @click.stop="moveFlag('center')" v-bind:disabled="!isStarted">
+          <span>Keep</span>
+        </button>
+      </div>
+      <div class="item">
         <button class="left" @click.stop="moveFlag('left')" v-bind:disabled="!isStarted">
           <span v-if="flagState.left === -1">↑</span>
           <span v-else>↓</span>
@@ -42,7 +47,7 @@
     padding: 30px 0;
 
     .item {
-      width: 50%;
+      width: 33.33333%;
       float: left;
       text-align: center;
     }
@@ -93,6 +98,18 @@
         background-color: #afafaf;
         border: 2px solid #8e8e8e;
         color: #8e8e8e;
+      }
+    }
+
+    .center {
+      background-color: #ec7373;
+      border: 2px solid #bf5e5e;
+      color: #fff;
+
+      &:disabled {
+        background-color: #ad5757;
+        border: 2px solid #8e4646;
+        color: #793d3d;
       }
     }
   }
