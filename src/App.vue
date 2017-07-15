@@ -9,8 +9,10 @@
       :count="count"
       @updateData="updateData">
     </buttons>
-    <div>{{message}}</div>
-    <div id="time" class="time">{{time.record}}</div>
+    <messages
+      :time="time"
+      :message="message">
+    </messages>
     <start-button
       :isStarted="isStarted"
       @startGame="startGame">
@@ -23,6 +25,7 @@
 <script>
   import Polidog from './components/Polidog'
   import Buttons from './components/Buttons'
+  import Messages from './components/Messages'
   import StartButton from './components/StartButton'
 
   export default {
@@ -30,6 +33,7 @@
     components: {
       Polidog,
       Buttons,
+      Messages,
       StartButton
     },
     data () {
@@ -94,29 +98,16 @@
             break
         }
       },
-      incrementCount () {
-        this.count += 1
-      },
-      stopWatch () {
-        if (this.isStarted === true) {
-          this.time.start = new Date()
-          this.time.measuring = setInterval(this.displayTime, 1)
+      checkAnswer () {
+        let nowAnswer = Object.assign({}, {left: this.answer.left, right: this.answer.right})
+        let answerJson = JSON.stringify(nowAnswer)
+        let flagStateJson = JSON.stringify(this.flagState)
+        if (answerJson === flagStateJson) {
+          this.message = '正解'
+          this.correctAnswerCount += 1
+        } else {
+          this.message = '不正解'
         }
-        if (this.isStarted === false) {
-          this.displayTime()
-          clearInterval(this.time.measuring)
-        }
-      },
-      displayTime () {
-        let stop = new Date()
-        let allTime = stop.getTime() - this.time.start.getTime()
-        let hour = Math.floor(allTime / (60 * 60 * 1000))
-        allTime = allTime - (hour * 60 * 60 * 1000)
-        let minute = Math.floor(allTime / (60 * 1000))
-        allTime = allTime - (minute * 60 * 1000)
-        let second = Math.floor(allTime / 1000)
-        let msecond = allTime % 1000
-        this.time.record = hour + ':' + minute + ':' + second + ':' + msecond
       },
       createAnswer () {
         const ary = [0, 1, 2]
@@ -163,16 +154,29 @@
       },
       // createQuestion () {
       // },
-      checkAnswer () {
-        let nowAnswer = Object.assign({}, {left: this.answer.left, right: this.answer.right})
-        let answerJson = JSON.stringify(nowAnswer)
-        let flagStateJson = JSON.stringify(this.flagState)
-        if (answerJson === flagStateJson) {
-          this.message = '正解'
-          this.correctAnswerCount += 1
-        } else {
-          this.message = '不正解'
+      incrementCount () {
+        this.count += 1
+      },
+      stopWatch () {
+        if (this.isStarted === true) {
+          this.time.start = new Date()
+          this.time.measuring = setInterval(this.displayTime, 1)
         }
+        if (this.isStarted === false) {
+          this.displayTime()
+          clearInterval(this.time.measuring)
+        }
+      },
+      displayTime () {
+        let stop = new Date()
+        let allTime = stop.getTime() - this.time.start.getTime()
+        let hour = Math.floor(allTime / (60 * 60 * 1000))
+        allTime = allTime - (hour * 60 * 60 * 1000)
+        let minute = Math.floor(allTime / (60 * 1000))
+        allTime = allTime - (minute * 60 * 1000)
+        let second = Math.floor(allTime / 1000)
+        let msecond = allTime % 1000
+        this.time.record = hour + '時間' + minute + '分' + second + '秒' + msecond
       }
     },
     watch: {
@@ -181,11 +185,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  .time {
-    width: 315px;
-    text-align: center;
-    margin: 0 auto 30px;
-  }
-</style>
