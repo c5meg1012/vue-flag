@@ -11,14 +11,13 @@
     </buttons>
     <messages
       :time="time"
+      :question="question"
       :message="message">
     </messages>
     <start-button
       :isStarted="isStarted"
       @startGame="startGame">
     </start-button>
-    <div>{{flagState.right}}</div>
-    <div>{{flagState.left}}</div>
   </div>
 </template>
 
@@ -52,10 +51,18 @@
         },
         answer: {
           left: -1,
-          right: -1,
-          type: 3
+          right: -1
         },
-        message: undefined
+        question: undefined,
+        colorText: { red: 'あか', white: 'しろ' },
+        movementText: {
+          raise: ['あげて！', 'さげないで！'],
+          lower: ['さげて！', 'あげないで！']
+        },
+        message: {
+          isCorrect: undefined,
+          correctAnswerCount: undefined
+        }
       }
     },
     methods: {
@@ -70,21 +77,25 @@
       },
       startGame () {
         this.isStarted = true
-        this.createAnswer()
+        this.updateQuestion()
       },
       endGame () {
         if (this.count >= 10) {
           let correctAnswerCountToDisplay = this.correctAnswerCount
-          this.message = '10問中' + correctAnswerCountToDisplay + '問正解でした！'
+          this.message.correctAnswerCount = '10問中' + correctAnswerCountToDisplay + '問正解でした！'
           this.initialize()
         }
       },
       updateData (hand) {
+        this.incrementCount()
         this.setFlagState(hand)
         this.checkAnswer()
-        this.createAnswer()
-        this.classifyAnswer()
-        this.incrementCount()
+        if (this.count < 10) {
+          this.updateQuestion()
+        }
+      },
+      incrementCount () {
+        this.count += 1
       },
       setFlagState (hand) {
         switch (hand) {
@@ -99,70 +110,79 @@
         }
       },
       checkAnswer () {
-        let nowAnswer = Object.assign({}, {left: this.answer.left, right: this.answer.right})
-        let answerJson = JSON.stringify(nowAnswer)
+        let answerJson = JSON.stringify(this.answer)
         let flagStateJson = JSON.stringify(this.flagState)
         if (answerJson === flagStateJson) {
-          this.message = '正解'
+          this.message.isCorrect = '正解！(｀・ω・´)'
           this.correctAnswerCount += 1
         } else {
-          this.message = '不正解'
+          this.message.isCorrect = '不正解...(´・ω・｀)'
         }
       },
+      updateQuestion () {
+        let flagColor = this.createAnswer()
+        this.question = this.createQuestion(flagColor)
+      },
       createAnswer () {
-        const ary = [0, 1, 2]
-        let random = ary[Math.floor(Math.random() * ary.length)]
-
+        const array = [0, 1, 2]
+        let random = array[Math.floor(Math.random() * array.length)]
         switch (random) {
           case 0:
             this.answer.left = this.flagState.left * -1
             this.answer.right = this.flagState.right
-            console.log('Q:left ' + this.answer.left)
-            console.log('Q:right ' + this.answer.right)
-            break
+            return 1
           case 1:
             this.answer.left = this.flagState.left
             this.answer.right = this.flagState.right * -1
-            console.log('Q:left ' + this.answer.left)
-            console.log('Q:right ' + this.answer.right)
-            break
+            return 0
           case 2:
             this.answer.left = this.flagState.left
             this.answer.right = this.flagState.right
-            console.log('Q:left ' + this.answer.left)
-            console.log('Q:right ' + this.answer.right)
-            break
+            const array2 = [0, 1]
+            let random2 = array2[Math.floor(Math.random() * array2.length)]
+            return random2
         }
+      },
+      createQuestion (flagColor) {
+        let answerType = this.classifyAnswer()
+        let createQuestionText = this.createQuestionText(answerType, flagColor)
+        return createQuestionText
       },
       classifyAnswer () {
-        switch (this.answer.left) {
-          case 1:
-            if (this.answer.right === 1) {
-              this.answer.type = 0
-            } else {
-              this.answer.type = 1
-            }
+        let answerType
+        if (this.answer.left === 1) {
+          answerType = this.answer.right === 1 ? 0 : 1
+        } else {
+          answerType = this.answer.right === 1 ? 2 : 3
+        }
+        return answerType
+      },
+      createQuestionText (answerType, flagColor) {
+        let questionText = flagColor === 0 ? this.colorText.red : this.colorText.white
+        let array = [0, 1]
+        let feint = array[Math.floor(Math.random() * array.length)]
+        switch (answerType) {
+          case 0:
+            questionText += this.movementText.raise[feint]
             break
-          case -1:
-            if (this.answer.right === 1) {
-              this.answer.type = 2
-            } else {
-              this.answer.type = 3
-            }
+          case 1:
+            questionText += flagColor === 0 ? this.movementText.lower[feint] : this.movementText.raise[feint]
+            break
+          case 2:
+            questionText += flagColor === 0 ? this.movementText.raise[feint] : this.movementText.lower[feint]
+            break
+          case 3:
+            questionText += this.movementText.lower[feint]
             break
         }
-      },
-      // createQuestion () {
-      // },
-      incrementCount () {
-        this.count += 1
+        return questionText
       },
       stopWatch () {
-        if (this.isStarted === true) {
+        if (this.isStarted) {
           this.time.start = new Date()
           this.time.measuring = setInterval(this.displayTime, 1)
         }
-        if (this.isStarted === false) {
+        if (!this.isStarted) {
           this.displayTime()
           clearInterval(this.time.measuring)
         }
