@@ -32,8 +32,7 @@
     },
     methods: {
       moveFlag (hand) {
-        this.$emit('setFlagState', hand)
-        this.$emit('incrementCount')
+        this.$emit('updateData', hand)
       }
     }
   }

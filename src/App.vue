@@ -7,8 +7,7 @@
       :flagState="flagState"
       :isStarted="isStarted"
       :count="count"
-      @setFlagState="setFlagState"
-      @incrementCount="incrementCount">
+      @updateData="updateData">
     </buttons>
     <div>{{message}}</div>
     <div id="time" class="time">{{time.record}}</div>
@@ -35,20 +34,22 @@
     },
     data () {
       return {
+        isStarted: false,
+        time: {
+          start: undefined,
+          record: undefined,
+          measuring: undefined
+        },
+        count: 0,
+        correctAnswerCount: 0,
         flagState: {
           left: -1,
           right: -1
         },
         answer: {
           left: -1,
-          right: -1
-        },
-        isStarted: false,
-        count: 0,
-        time: {
-          start: undefined,
-          record: undefined,
-          measuring: undefined
+          right: -1,
+          type: 3
         },
         message: undefined
       }
@@ -57,10 +58,29 @@
       initialize () {
         this.isStarted = false
         this.count = 0
+        this.correctAnswerCount = 0
         this.flagState.right = -1
         this.flagState.left = -1
         this.answer.right = -1
         this.answer.left = -1
+      },
+      startGame () {
+        this.isStarted = true
+        this.createAnswer()
+      },
+      endGame () {
+        if (this.count >= 10) {
+          let correctAnswerCountToDisplay = this.correctAnswerCount
+          this.message = '10問中' + correctAnswerCountToDisplay + '問正解でした！'
+          this.initialize()
+        }
+      },
+      updateData (hand) {
+        this.setFlagState(hand)
+        this.checkAnswer()
+        this.createAnswer()
+        this.classifyAnswer()
+        this.incrementCount()
       },
       setFlagState (hand) {
         switch (hand) {
@@ -72,18 +92,6 @@
             break
           case 'center':
             break
-        }
-        // 暫定
-        this.checkAnswer()
-        this.createAnswer()
-      },
-      startGame () {
-        this.isStarted = true
-        this.createAnswer()
-      },
-      endGame () {
-        if (this.count >= 10) {
-          this.initialize()
         }
       },
       incrementCount () {
@@ -113,25 +121,55 @@
       createAnswer () {
         const ary = [0, 1, 2]
         let random = ary[Math.floor(Math.random() * ary.length)]
-        let nowFlagState = Object.assign({}, this.flagState)
+
         switch (random) {
           case 0:
-            this.answer.left = nowFlagState.left * -1
+            this.answer.left = this.flagState.left * -1
+            this.answer.right = this.flagState.right
+            console.log('Q:left ' + this.answer.left)
+            console.log('Q:right ' + this.answer.right)
             break
           case 1:
-            this.answer.right = nowFlagState.right * -1
+            this.answer.left = this.flagState.left
+            this.answer.right = this.flagState.right * -1
+            console.log('Q:left ' + this.answer.left)
+            console.log('Q:right ' + this.answer.right)
             break
           case 2:
+            this.answer.left = this.flagState.left
+            this.answer.right = this.flagState.right
+            console.log('Q:left ' + this.answer.left)
+            console.log('Q:right ' + this.answer.right)
             break
         }
-        console.log('left' + this.answer.left)
-        console.log('right' + this.answer.right)
       },
+      classifyAnswer () {
+        switch (this.answer.left) {
+          case 1:
+            if (this.answer.right === 1) {
+              this.answer.type = 0
+            } else {
+              this.answer.type = 1
+            }
+            break
+          case -1:
+            if (this.answer.right === 1) {
+              this.answer.type = 2
+            } else {
+              this.answer.type = 3
+            }
+            break
+        }
+      },
+      // createQuestion () {
+      // },
       checkAnswer () {
-        let answerJson = JSON.stringify(this.answer)
+        let nowAnswer = Object.assign({}, {left: this.answer.left, right: this.answer.right})
+        let answerJson = JSON.stringify(nowAnswer)
         let flagStateJson = JSON.stringify(this.flagState)
         if (answerJson === flagStateJson) {
           this.message = '正解'
+          this.correctAnswerCount += 1
         } else {
           this.message = '不正解'
         }
