@@ -75,6 +75,10 @@
         this.answer.right = -1
         this.answer.left = -1
       },
+      random (array) {
+        let random = array[Math.floor(Math.random() * array.length)]
+        return random
+      },
       startGame () {
         this.isStarted = true
         this.updateQuestion()
@@ -124,8 +128,7 @@
         this.question = this.createQuestion(flagColor)
       },
       createAnswer () {
-        const array = [0, 1, 2]
-        let random = array[Math.floor(Math.random() * array.length)]
+        let random = this.random([0, 1, 2])
         switch (random) {
           case 0:
             this.answer.left = this.flagState.left * -1
@@ -159,8 +162,7 @@
       },
       createQuestionText (answerType, flagColor) {
         let questionText = flagColor === 0 ? this.colorText.red : this.colorText.white
-        let array = [0, 1]
-        let feint = array[Math.floor(Math.random() * array.length)]
+        let feint = this.random([0, 1])
         switch (answerType) {
           case 0:
             questionText += this.movementText.raise[feint]
