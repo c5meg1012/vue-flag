@@ -1,21 +1,31 @@
-# vue-flag
+# ポリドッグ旗揚げゲーム
 
-> A Vue.js project
+Vue.jsの特訓のために作ってみました。
 
-## Build Setup
+<img width="200" alt="readme_thumbnail" src="https://user-images.githubusercontent.com/12626275/28253145-d3a42246-6ada-11e7-88f3-6cae73536680.png">
+
+
+## ローカル環境でのあそびかた
+
+git clone する
 
 ``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+$ git clone https://github.com/c5meg1012/vue-flag.git
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+npm install する
+
+
+``` bash
+$ npm install
+```
+
+ローカルでサーバーを立ち上げる
+
+``` bash
+$ npm run dev
+```
+
+以下のURLが立ち上がります
+
+http://localhost:8080/
